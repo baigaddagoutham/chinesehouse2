@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .video-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        video {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <h2>Video Test</h2>
+        <video id="testVideo" controls preload="auto">
+            <source src="img/video.mp4" type="video/mp4">
+            <source src="img/video.mp4" type="video/mp4; codecs=avc1.42E01E, mp4a.40.2">
+            Your browser does not support the video tag.
+        </video>
+        <div id="status" class="status info">Testing video...</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('testVideo');
+            const status = document.getElementById('status');
+            
+            function updateStatus(message, type) {
+                status.textContent = message;
+                status.className = 'status ' + type;
+            }
+            
+            // Test video loading
+            video.addEventListener('loadstart', function() {
+                updateStatus('Video loading started...', 'info');
+            });
+            
+            video.addEventListener('loadedmetadata', function() {
+                updateStatus('Video metadata loaded successfully', 'success');
+            });
+            
+            video.addEventListener('loadeddata', function() {
+                updateStatus('Video data loaded successfully', 'success');
+            });
+            
+            video.addEventListener('canplay', function() {
+                updateStatus('Video can start playing', 'success');
+            });
+            
+            video.addEventListener('canplaythrough', function() {
+                updateStatus('Video can play through without buffering', 'success');
+            });
+            
+            video.addEventListener('error', function(e) {
+                updateStatus('Video failed to load: ' + (video.error ? video.error.message : 'Unknown error'), 'error');
+                console.log('Video error:', video.error);
+            });
+            
+            video.addEventListener('play', function() {
+                updateStatus('Video is playing', 'success');
+            });
+            
+            video.addEventListener('pause', function() {
+                updateStatus('Video is paused', 'info');
+            });
+            
+            // Test video properties
+            setTimeout(function() {
+                console.log('Video duration:', video.duration);
+                console.log('Video ready state:', video.readyState);
+                console.log('Video network state:', video.networkState);
+                console.log('Video error:', video.error);
+            }, 2000);
+        });
+    </script>
+</body>
+</html> 
